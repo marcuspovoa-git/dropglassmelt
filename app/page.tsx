@@ -8,6 +8,7 @@ export default function Home() {
   const [mensagem, setMensagem] = useState('')
   const [enviado, setEnviado] = useState(false)
   const [mostrar, setMostrar] = useState(false)
+  const [erro, setErro] = useState(false)
 
   useEffect(() => {
     const jaViu = localStorage.getItem('dgm_formulario_visto')
@@ -21,12 +22,26 @@ export default function Home() {
     localStorage.setItem('dgm_formulario_visto', 'true')
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setEnviado(true)
-    setTimeout(() => {
-      fecharEMarcar()
-    }, 2000)
+    setErro(false)
+
+    try {
+      const res = await fetch('/api/mensagem-home', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, mensagem }),
+      })
+
+      if (!res.ok) throw new Error('Falha')
+
+      setEnviado(true)
+      setTimeout(() => {
+        fecharEMarcar()
+      }, 2000)
+    } catch {
+      setErro(true)
+    }
   }
 
   function handleOverlayClick(e: React.MouseEvent<HTMLDivElement>) {
@@ -75,6 +90,10 @@ export default function Home() {
                 >
                   ENVIAR
                 </button>
+
+                {erro && (
+                  <p className="text-red-500 text-sm">Algo deu errado. Tenta de novo.</p>
+                )}
               </form>
             ) : (
               <p className="text-lg font-light tracking-wide">
