@@ -15,10 +15,14 @@ export default async function BlogList() {
   const posts = await client.fetch(`*[_type == "post"] | order(dataPublicacao desc)`)
 
   return (
-    <main className="min-h-screen bg-[#faf9f6] text-black px-6 py-24 md:px-0">
+    <main className="min-h-screen bg-[#faf9f6] text-black px-6 py-16 md:px-0">
       <div className="max-w-2xl mx-auto">
+        <a href="/" className="text-black/50 text-sm tracking-widest hover:text-black transition-colors">
+          ← INÍCIO
+        </a>
+
         {posts.map((post: any, i: number) => (
-          <article key={post._id} className={i === 0 ? '' : 'mt-32'}>
+          <article key={post._id} className="mt-20">
             {post.capa && (
               <img
                 src={urlFor(post.capa).width(1200).url()}

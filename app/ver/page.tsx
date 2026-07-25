@@ -1,5 +1,6 @@
 import { client } from '../../sanity/client'
 import { createImageUrlBuilder } from '@sanity/image-url'
+import GaleriaItem from '../../components/GaleriaItem'
 
 const builder = createImageUrlBuilder({
   projectId: '645e5dvw',
@@ -18,7 +19,7 @@ export default async function Ver() {
   const galeria = pagina?.galeria ?? []
 
   return (
-    <main className="min-h-screen bg-white text-black px-6 py-16 md:px-16">
+    <main className="min-h-screen bg-white text-black px-6 py-24 md:py-16 md:px-16">
       <a href="/" className="text-black/50 text-sm tracking-widest hover:text-black transition-colors">
         ← INÍCIO
       </a>
@@ -35,20 +36,11 @@ export default async function Ver() {
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-1">
         {galeria.map((item: any, i: number) => (
-          <div key={i} className="relative aspect-square overflow-hidden group cursor-pointer">
-            <img
-              src={urlFor(item.imagem).width(600).height(600).url()}
-              alt={item.legenda || ''}
-              className="w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-40"
-            />
-            {item.legenda && (
-              <div className="absolute inset-0 flex items-center justify-center px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <p className="text-center text-black text-sm md:text-base font-medium tracking-wide bg-white/0">
-                  {item.legenda}
-                </p>
-              </div>
-            )}
-          </div>
+          <GaleriaItem
+            key={i}
+            imagemUrl={urlFor(item.imagem).width(600).height(600).url()}
+            legenda={item.legenda}
+          />
         ))}
       </div>
     </main>
